@@ -1,23 +1,29 @@
-use rust_bert::pipelines::{
-    common::ModelType,
-    text_generation::{TextGenerationConfig, TextGenerationModel},
+use rust_bert::{
+    gpt_neo::{
+        GptNeoConfigResources, GptNeoMergesResources, GptNeoModelResources, GptNeoVocabResources,
+    },
+    pipelines::{
+        common::ModelType,
+        text_generation::{TextGenerationConfig, TextGenerationModel},
+    },
+    resources::RemoteResource,
 };
-use rust_bert::resources::LocalResource;
-use std::path::PathBuf;
+//use rust_bert::resources::LocalResource;
+//use std::path::PathBuf;
 
 fn main() {
-    let model_resource = Box::new(LocalResource {
-        local_path: PathBuf::from("/Users/qbui/local/rust_projects/bert_test/data/rust_model.ot"),
-    });
-    let config_resource = Box::new(LocalResource {
-        local_path: PathBuf::from("/Users/qbui/local/rust_projects/bert_test/data/config.json"),
-    });
-    let vocab_resource = Box::new(LocalResource {
-        local_path: PathBuf::from("/Users/qbui/local/rust_projects/bert_test/data/vocab.json"),
-    });
-    let merges_resource = Box::new(LocalResource {
-        local_path: PathBuf::from("/Users/qbui/local/rust_projects/bert_test/data/merges.txt"),
-    });
+    let model_resource = Box::new(RemoteResource::from_pretrained(
+        GptNeoModelResources::GPT_NEO_2_7B,
+    ));
+    let config_resource = Box::new(RemoteResource::from_pretrained(
+        GptNeoConfigResources::GPT_NEO_2_7B,
+    ));
+    let vocab_resource = Box::new(RemoteResource::from_pretrained(
+        GptNeoVocabResources::GPT_NEO_2_7B,
+    ));
+    let merges_resource = Box::new(RemoteResource::from_pretrained(
+        GptNeoMergesResources::GPT_NEO_2_7B,
+    ));
 
     let generate_config = TextGenerationConfig {
         model_type: ModelType::GPTNeo,
